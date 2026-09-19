@@ -2,540 +2,1061 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
 <title>RecargaPlus | Servicios Premium</title>
 
 <style>
+/* =========================================================
+   RECARGAPLUS PREMIUM
+   ========================================================= */
+
 *{
   box-sizing:border-box;
   margin:0;
   padding:0;
+  -webkit-tap-highlight-color:transparent;
+}
+
+:root{
+  --bg:#07050d;
+  --purple:#8b5cf6;
+  --purple2:#c084fc;
+  --lime:#b7ff39;
+  --cyan:#45e7ff;
+  --pink:#ff4fd8;
+  --white:#f8fbff;
+  --muted:#a9a5b8;
+  --card:rgba(20,16,34,.68);
+  --border:rgba(255,255,255,.11);
+}
+
+html{
+  scroll-behavior:smooth;
 }
 
 body{
   font-family:Arial,Helvetica,sans-serif;
   min-height:100vh;
-  color:#063f46;
-  background:
-    radial-gradient(circle at 15% 15%,rgba(255,255,255,.95),transparent 30%),
-    radial-gradient(circle at 85% 20%,rgba(95,220,235,.38),transparent 30%),
-    radial-gradient(circle at 45% 90%,rgba(255,255,255,.75),transparent 35%),
-    linear-gradient(135deg,#ffffff 0%,#e9fbff 38%,#91ddec 72%,#dffaff 100%);
+  background:#07050d;
+  color:var(--white);
   overflow-x:hidden;
 }
 
-/* DETALLES DEL FONDO */
-body::before{
-  content:"";
+/* =========================================================
+   FONDO ANIMADO
+   ========================================================= */
+
+.background{
   position:fixed;
   inset:0;
-  pointer-events:none;
-  opacity:.13;
+  overflow:hidden;
+  z-index:-10;
+  background:
+    radial-gradient(circle at 50% 10%,rgba(139,92,246,.18),transparent 35%),
+    radial-gradient(circle at 10% 70%,rgba(183,255,57,.08),transparent 32%),
+    radial-gradient(circle at 90% 60%,rgba(255,79,216,.09),transparent 30%),
+    #07050d;
+}
+
+.orb{
+  position:absolute;
+  border-radius:50%;
+  filter:blur(45px);
+  opacity:.42;
+  animation:floatOrb 12s ease-in-out infinite alternate;
+}
+
+.orb.one{
+  width:280px;
+  height:280px;
+  background:#7c3aed;
+  top:-90px;
+  left:-80px;
+}
+
+.orb.two{
+  width:230px;
+  height:230px;
+  background:#b7ff39;
+  right:-100px;
+  top:25%;
+  animation-delay:-4s;
+}
+
+.orb.three{
+  width:300px;
+  height:300px;
+  background:#c026d3;
+  left:20%;
+  bottom:-170px;
+  animation-delay:-7s;
+}
+
+.orb.four{
+  width:180px;
+  height:180px;
+  background:#22d3ee;
+  right:15%;
+  bottom:15%;
+  animation-delay:-2s;
+}
+
+@keyframes floatOrb{
+  0%{
+    transform:translate3d(-20px,-10px,0) scale(1);
+  }
+  50%{
+    transform:translate3d(40px,30px,0) scale(1.15);
+  }
+  100%{
+    transform:translate3d(-10px,60px,0) scale(.9);
+  }
+}
+
+/* partículas */
+.particles{
+  position:absolute;
+  inset:0;
   background-image:
-    radial-gradient(circle,#fff 1px,transparent 1.5px);
-  background-size:45px 45px;
-  z-index:-1;
+    radial-gradient(circle,rgba(255,255,255,.8) 1px,transparent 1.5px),
+    radial-gradient(circle,rgba(183,255,57,.5) 1px,transparent 1.5px);
+  background-size:75px 75px,125px 125px;
+  background-position:0 0,35px 45px;
+  opacity:.16;
+  animation:stars 20s linear infinite;
 }
 
-/* NAVBAR */
-header{
+@keyframes stars{
+  from{
+    transform:translateY(0);
+  }
+  to{
+    transform:translateY(-75px);
+  }
+}
+
+/* líneas de profundidad */
+.grid3d{
+  position:absolute;
+  left:-50%;
+  width:200%;
+  height:55%;
+  bottom:-25%;
+  background:
+    linear-gradient(rgba(183,255,57,.07) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(139,92,246,.08) 1px,transparent 1px);
+  background-size:50px 50px;
+  transform:perspective(350px) rotateX(62deg);
+  transform-origin:center;
+  opacity:.45;
+  animation:gridMove 10s linear infinite;
+}
+
+@keyframes gridMove{
+  from{
+    background-position:0 0;
+  }
+  to{
+    background-position:0 50px;
+  }
+}
+
+/* =========================================================
+   APP
+   ========================================================= */
+
+.app{
   width:100%;
-  padding:18px 6%;
+  max-width:900px;
+  margin:auto;
+  min-height:100vh;
+  padding-bottom:95px;
+}
+
+.screen{
+  display:none;
+  min-height:calc(100vh - 95px);
+  padding:18px 18px 35px;
+  animation:screenIn .35s ease;
+}
+
+.screen.active{
+  display:block;
+}
+
+@keyframes screenIn{
+  from{
+    opacity:0;
+    transform:translateY(14px) scale(.99);
+  }
+  to{
+    opacity:1;
+    transform:none;
+  }
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.top{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  position:relative;
-  z-index:10;
+  margin-bottom:25px;
 }
 
-.logo{
-  font-size:30px;
-  font-weight:900;
-  color:#14aeb9;
-  -webkit-text-stroke:1.4px #001f24;
-  text-shadow:0 3px 0 rgba(0,0,0,.12);
-  letter-spacing:-1px;
+.brand{
+  font-size:31px;
+  font-weight:1000;
+  letter-spacing:-1.5px;
+  color:white;
+  text-shadow:
+    0 0 12px rgba(139,92,246,.7),
+    0 0 30px rgba(183,255,57,.15);
 }
 
-.menu{
+.brand span{
+  color:var(--lime);
+}
+
+.status{
   display:flex;
-  gap:10px;
-}
-
-.menu button{
-  border:1px solid rgba(0,70,80,.18);
-  background:rgba(255,255,255,.5);
-  backdrop-filter:blur(10px);
-  color:#06464d;
-  padding:10px 16px;
+  align-items:center;
+  gap:7px;
+  padding:8px 12px;
   border-radius:20px;
-  cursor:pointer;
-  font-weight:bold;
-  transition:.25s;
-}
-
-.menu button:hover{
-  transform:translateY(-2px);
-  background:white;
-}
-
-/* TASA */
-.rate-bar{
-  width:90%;
-  max-width:1100px;
-  margin:0 auto 12px;
-  padding:10px 15px;
-  border-radius:16px;
-  background:rgba(255,255,255,.62);
-  border:1px solid rgba(0,70,80,.15);
+  background:rgba(255,255,255,.06);
+  border:1px solid var(--border);
+  font-size:11px;
+  color:#c8c5d1;
   backdrop-filter:blur(12px);
+}
+
+.status i{
+  width:7px;
+  height:7px;
+  background:var(--lime);
+  border-radius:50%;
+  box-shadow:0 0 12px var(--lime);
+}
+
+/* =========================================================
+   DÓLAR
+   ========================================================= */
+
+.rate{
+  position:fixed;
+  top:12px;
+  left:50%;
+  transform:translateX(-50%);
+  width:calc(100% - 30px);
+  max-width:550px;
+  z-index:200;
   display:flex;
-  justify-content:space-between;
   align-items:center;
-  gap:10px;
-  box-shadow:0 8px 25px rgba(0,90,110,.08);
+  justify-content:space-between;
+  gap:8px;
+  padding:9px 11px 9px 14px;
+  border:1px solid rgba(255,255,255,.13);
+  background:rgba(12,9,22,.72);
+  backdrop-filter:blur(18px);
+  border-radius:17px;
+  box-shadow:0 10px 35px rgba(0,0,0,.3);
+  transition:.3s;
 }
 
-.rate-info{
+.rate.hidden{
+  transform:translate(-50%,-150%);
+}
+
+.rate-left{
+  font-size:12px;
+  color:#c6c3ce;
+}
+
+.rate-left strong{
+  color:var(--lime);
   font-size:14px;
-  font-weight:bold;
-}
-
-.rate-info span{
-  color:#0097a7;
 }
 
 .rate-actions{
   display:flex;
-  align-items:center;
-  gap:7px;
+  gap:5px;
 }
 
-.rate-actions input{
-  width:100px;
-  padding:7px 9px;
-  border-radius:9px;
-  border:1px solid #8acbd4;
-  outline:none;
-  text-align:center;
-}
-
-.small-btn{
-  border:none;
-  padding:7px 10px;
-  border-radius:9px;
-  cursor:pointer;
-  background:#0da9b5;
+.rate input{
+  width:75px;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.1);
   color:white;
-  font-weight:bold;
-}
-
-.hide-rate{
-  background:#073f46;
-}
-
-/* HERO */
-.hero{
+  padding:6px;
+  border-radius:8px;
   text-align:center;
-  padding:35px 20px 25px;
+  outline:none;
+}
+
+.rate button{
+  border:none;
+  border-radius:8px;
+  padding:6px 8px;
+  color:white;
+  background:rgba(139,92,246,.65);
+  cursor:pointer;
+}
+
+.rate-hide{
+  background:rgba(255,255,255,.08)!important;
+}
+
+.rate-show{
+  position:fixed;
+  right:15px;
+  top:15px;
+  z-index:199;
+  display:none;
+  border:none;
+  background:rgba(15,11,25,.85);
+  color:var(--lime);
+  border:1px solid rgba(183,255,57,.25);
+  padding:9px 12px;
+  border-radius:15px;
+  backdrop-filter:blur(12px);
+}
+
+.rate-show.active{
+  display:block;
+}
+
+/* =========================================================
+   HOME
+   ========================================================= */
+
+.hero{
+  padding-top:42px;
+  min-height:calc(100vh - 120px);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  width:max-content;
+  padding:8px 12px;
+  border-radius:20px;
+  background:rgba(183,255,57,.08);
+  border:1px solid rgba(183,255,57,.2);
+  color:var(--lime);
+  font-size:11px;
+  margin-bottom:20px;
+}
+
+.badge span{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:var(--lime);
+  box-shadow:0 0 12px var(--lime);
 }
 
 .hero h1{
-  font-size:clamp(34px,7vw,62px);
-  color:#11aebb;
-  -webkit-text-stroke:1.7px #002a30;
-  text-shadow:0 5px 0 rgba(0,0,0,.08);
-  margin-bottom:10px;
+  font-size:clamp(48px,15vw,88px);
+  line-height:.9;
+  letter-spacing:-5px;
+  margin-bottom:20px;
+  color:white;
+  text-shadow:
+    0 0 25px rgba(139,92,246,.35),
+    0 0 70px rgba(183,255,57,.08);
+}
+
+.hero h1 span{
+  color:transparent;
+  -webkit-text-stroke:1px rgba(255,255,255,.75);
+  background:linear-gradient(90deg,#b7ff39,#8b5cf6,#45e7ff);
+  -webkit-background-clip:text;
+  background-clip:text;
 }
 
 .hero p{
-  max-width:650px;
-  margin:auto;
-  color:#255c62;
+  max-width:580px;
+  color:#aaa6b6;
   font-size:16px;
-  line-height:1.6;
+  line-height:1.7;
 }
 
-/* SERVICIOS */
-.container{
-  width:92%;
-  max-width:1100px;
-  margin:20px auto 80px;
+.hero-buttons{
+  display:flex;
+  gap:10px;
+  margin-top:28px;
+  flex-wrap:wrap;
 }
 
-.section-title{
-  text-align:center;
-  margin:30px 0 20px;
-}
-
-.section-title h2{
-  font-size:28px;
-  color:#063f46;
-}
-
-.section-title p{
-  color:#46747a;
-  margin-top:5px;
-}
-
-.services{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
-  gap:18px;
-}
-
-/* TARJETAS */
-.service{
-  position:relative;
-  overflow:hidden;
-  border-radius:25px;
-  padding:24px;
-  min-height:205px;
+.primary{
+  border:none;
+  background:linear-gradient(135deg,#9d5cff,#7041e8);
+  color:white;
+  padding:14px 20px;
+  border-radius:15px;
+  font-weight:bold;
+  font-size:14px;
   cursor:pointer;
-  background:rgba(255,255,255,.65);
-  border:1px solid rgba(255,255,255,.85);
-  backdrop-filter:blur(14px);
-  box-shadow:0 15px 35px rgba(0,80,100,.12);
-  transition:.3s ease;
+  box-shadow:0 10px 30px rgba(124,58,237,.3);
+  transition:.25s;
 }
 
-.service::before{
+.secondary{
+  border:1px solid rgba(255,255,255,.13);
+  background:rgba(255,255,255,.05);
+  color:white;
+  padding:14px 20px;
+  border-radius:15px;
+  font-weight:bold;
+  font-size:14px;
+  cursor:pointer;
+  backdrop-filter:blur(12px);
+}
+
+.primary:active,
+.secondary:active,
+.service-card:active,
+.nav-item:active{
+  transform:scale(.94);
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:9px;
+  margin-top:40px;
+}
+
+.stat{
+  padding:14px 10px;
+  text-align:center;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.04);
+  border-radius:16px;
+  backdrop-filter:blur(12px);
+}
+
+.stat strong{
+  display:block;
+  font-size:20px;
+  color:white;
+}
+
+.stat span{
+  font-size:10px;
+  color:#85808f;
+}
+
+/* =========================================================
+   TITULOS
+   ========================================================= */
+
+.page-title{
+  margin:15px 0 22px;
+}
+
+.page-title small{
+  color:var(--lime);
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:2px;
+}
+
+.page-title h2{
+  font-size:35px;
+  margin-top:5px;
+  letter-spacing:-1px;
+}
+
+.page-title p{
+  color:#928e9e;
+  margin-top:8px;
+  line-height:1.5;
+  font-size:14px;
+}
+
+/* =========================================================
+   SERVICIOS
+   ========================================================= */
+
+.service-list{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+
+.service-card{
+  position:relative;
+  min-height:190px;
+  padding:18px;
+  border-radius:23px;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.1);
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.09),rgba(255,255,255,.025));
+  backdrop-filter:blur(16px);
+  cursor:pointer;
+  transition:.3s;
+  box-shadow:
+    inset 0 1px rgba(255,255,255,.08),
+    0 15px 35px rgba(0,0,0,.18);
+}
+
+.service-card::before{
   content:"";
   position:absolute;
   width:130px;
   height:130px;
-  right:-55px;
-  top:-55px;
+  right:-65px;
+  top:-65px;
   border-radius:50%;
-  background:rgba(42,205,220,.2);
+  background:var(--glow,#8b5cf6);
+  filter:blur(35px);
+  opacity:.28;
 }
 
-.service:hover{
-  transform:translateY(-7px) scale(1.015);
-  box-shadow:0 22px 45px rgba(0,90,110,.18);
+.service-card:hover{
+  transform:translateY(-6px);
+  border-color:rgba(255,255,255,.2);
 }
 
-.icon{
+.service-icon{
+  position:relative;
   width:58px;
   height:58px;
-  border-radius:17px;
   display:flex;
   align-items:center;
   justify-content:center;
+  border-radius:18px;
+  background:rgba(255,255,255,.09);
+  border:1px solid rgba(255,255,255,.12);
   font-size:29px;
-  background:linear-gradient(135deg,#ffffff,#b8f4fa);
-  border:1px solid rgba(0,100,110,.12);
-  box-shadow:0 8px 18px rgba(0,100,110,.1);
-  margin-bottom:15px;
+  margin-bottom:20px;
+  box-shadow:0 10px 25px rgba(0,0,0,.15);
 }
 
-.service h3{
-  font-size:21px;
-  color:#073f46;
+.service-card h3{
+  font-size:18px;
   margin-bottom:7px;
 }
 
-.service p{
-  color:#51747a;
-  font-size:13px;
-  line-height:1.5;
-}
-
-.view{
-  position:absolute;
-  right:17px;
-  bottom:17px;
-  padding:7px 11px;
-  border-radius:12px;
-  background:#0ca9b6;
-  color:white;
+.service-card p{
+  color:#9692a2;
   font-size:12px;
-  font-weight:bold;
+  line-height:1.5;
+  padding-right:10px;
 }
 
-/* MODAL */
-.modal{
-  position:fixed;
-  inset:0;
-  background:rgba(0,30,35,.45);
-  backdrop-filter:blur(7px);
-  display:none;
+.arrow{
+  position:absolute;
+  right:15px;
+  bottom:15px;
+  width:30px;
+  height:30px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  border-radius:10px;
+  background:rgba(255,255,255,.08);
+  color:var(--lime);
+}
+
+/* =========================================================
+   DETALLE DEL SERVICIO
+   ========================================================= */
+
+.detail-head{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  margin-bottom:24px;
+}
+
+.back{
+  width:42px;
+  height:42px;
+  border:none;
+  border-radius:13px;
+  color:white;
+  background:rgba(255,255,255,.07);
+  border:1px solid var(--border);
+  cursor:pointer;
+  font-size:19px;
+}
+
+.detail-icon{
+  width:56px;
+  height:56px;
+  display:flex;
   align-items:center;
   justify-content:center;
-  padding:20px;
-  z-index:100;
-}
-
-.modal.active{
-  display:flex;
-}
-
-.modal-box{
-  width:100%;
-  max-width:720px;
-  max-height:88vh;
-  overflow:auto;
-  background:linear-gradient(145deg,#ffffff,#e5fbff);
-  border-radius:28px;
-  padding:28px;
-  box-shadow:0 30px 80px rgba(0,40,50,.3);
-  position:relative;
-  animation:appear .25s ease;
-}
-
-@keyframes appear{
-  from{opacity:0;transform:scale(.94) translateY(15px)}
-  to{opacity:1;transform:scale(1) translateY(0)}
-}
-
-.close{
-  position:absolute;
-  right:18px;
-  top:16px;
-  width:36px;
-  height:36px;
-  border-radius:50%;
-  border:none;
-  background:#083f46;
-  color:white;
-  font-size:20px;
-  cursor:pointer;
-}
-
-.modal-title{
-  display:flex;
-  gap:14px;
-  align-items:center;
-  margin-bottom:22px;
-}
-
-.modal-title .icon{
-  margin:0;
-}
-
-.modal-title h2{
-  color:#063f46;
   font-size:28px;
+  border-radius:17px;
+  background:rgba(255,255,255,.08);
+  border:1px solid var(--border);
 }
 
-/* PLANES */
+.detail-head h2{
+  font-size:25px;
+}
+
+.detail-head p{
+  color:#85818f;
+  font-size:12px;
+  margin-top:4px;
+}
+
 .plans{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
-  gap:14px;
+  gap:13px;
 }
 
 .plan{
-  border:1px solid rgba(0,110,120,.16);
-  border-radius:20px;
-  padding:18px;
-  background:rgba(255,255,255,.7);
+  position:relative;
+  padding:20px;
+  border-radius:22px;
+  background:
+    linear-gradient(145deg,rgba(139,92,246,.13),rgba(255,255,255,.04));
+  border:1px solid rgba(255,255,255,.1);
+  overflow:hidden;
+}
+
+.plan.featured{
+  border-color:rgba(183,255,57,.35);
+  box-shadow:0 0 30px rgba(183,255,57,.06);
+}
+
+.recommended{
+  position:absolute;
+  top:12px;
+  right:12px;
+  padding:5px 8px;
+  border-radius:8px;
+  background:rgba(183,255,57,.12);
+  color:var(--lime);
+  font-size:9px;
+  font-weight:bold;
 }
 
 .plan h3{
-  color:#079eab;
-  margin-bottom:5px;
+  font-size:19px;
+  margin-bottom:7px;
 }
 
-.price{
-  font-size:27px;
+.plan-price{
+  font-size:34px;
   font-weight:900;
-  color:#063f46;
-  margin:9px 0 14px;
+  color:white;
+  margin:10px 0 16px;
 }
 
-.plan ul{
+.plan-price small{
+  font-size:11px;
+  color:#85818f;
+  font-weight:normal;
+}
+
+.features{
   list-style:none;
-  margin-bottom:15px;
+  margin-bottom:17px;
 }
 
-.plan li{
-  margin:8px 0;
+.features li{
+  color:#b4b0bd;
   font-size:13px;
-  color:#42676c;
+  padding:7px 0;
+  line-height:1.4;
 }
 
-.plan li::before{
+.features li::before{
   content:"✓";
-  color:#00a8b5;
+  color:var(--lime);
   font-weight:bold;
-  margin-right:7px;
+  margin-right:8px;
 }
 
-.add{
+.add-btn{
   width:100%;
   border:none;
-  padding:11px;
+  padding:13px;
   border-radius:13px;
-  background:#0aa8b5;
   color:white;
   font-weight:bold;
   cursor:pointer;
+  background:linear-gradient(135deg,#8b5cf6,#6d3ce0);
   transition:.2s;
 }
 
-.add:hover{
-  background:#087f8a;
-  transform:translateY(-2px);
+.add-btn:active{
+  transform:scale(.96);
 }
 
-.more{
-  margin-top:18px;
-  border:1px dashed #65bfc8;
-  padding:17px;
-  border-radius:17px;
-  background:rgba(220,250,253,.65);
+.guide{
+  margin-top:16px;
+  padding:19px;
+  border-radius:20px;
+  border:1px solid rgba(69,231,255,.13);
+  background:rgba(69,231,255,.04);
 }
 
-.more h3{
-  margin-bottom:6px;
-  color:#07545b;
+.guide h3{
+  font-size:15px;
+  margin-bottom:8px;
+  color:#dceaff;
 }
 
-.more p{
+.guide p{
+  color:#9692a2;
   font-size:13px;
-  line-height:1.6;
-  color:#527278;
+  line-height:1.65;
 }
 
-.more button{
-  margin-top:10px;
-  padding:9px 13px;
-  border:none;
-  border-radius:10px;
-  background:#063f46;
-  color:white;
-  cursor:pointer;
+/* =========================================================
+   CARRITO
+   ========================================================= */
+
+.cart-empty{
+  padding:45px 20px;
+  text-align:center;
+  border:1px dashed rgba(255,255,255,.13);
+  border-radius:22px;
+  background:rgba(255,255,255,.03);
 }
 
-/* CARRITO */
-.cart-button{
-  position:fixed;
-  right:20px;
-  bottom:20px;
-  width:58px;
-  height:58px;
-  border-radius:50%;
-  border:none;
-  background:#073f46;
-  color:white;
-  font-size:23px;
-  cursor:pointer;
-  z-index:90;
-  box-shadow:0 10px 30px rgba(0,40,50,.3);
+.cart-empty .big{
+  font-size:48px;
+  margin-bottom:12px;
 }
 
-.cart-count{
-  position:absolute;
-  right:-3px;
-  top:-3px;
-  width:22px;
-  height:22px;
-  border-radius:50%;
-  background:#0db6c3;
-  font-size:12px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:bold;
+.cart-empty h3{
+  margin-bottom:7px;
 }
 
-.cart-panel{
-  position:fixed;
-  right:20px;
-  bottom:88px;
-  width:min(380px,calc(100% - 40px));
-  max-height:75vh;
-  overflow:auto;
-  background:white;
-  border-radius:24px;
-  padding:20px;
-  z-index:89;
-  display:none;
-  box-shadow:0 20px 70px rgba(0,40,50,.3);
+.cart-empty p{
+  color:#85818f;
+  font-size:13px;
 }
 
-.cart-panel.active{
-  display:block;
-}
-
-.cart-panel h2{
-  color:#063f46;
-  margin-bottom:15px;
+.cart-items{
+  display:grid;
+  gap:10px;
 }
 
 .cart-item{
   display:flex;
   justify-content:space-between;
+  align-items:center;
   gap:10px;
-  padding:12px 0;
-  border-bottom:1px solid #e1eeee;
-  font-size:13px;
+  padding:15px;
+  border-radius:17px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.08);
+}
+
+.cart-info strong{
+  font-size:14px;
+}
+
+.cart-info span{
+  display:block;
+  color:#85818f;
+  font-size:11px;
+  margin-top:4px;
+}
+
+.cart-price{
+  color:var(--lime);
+  font-weight:bold;
+  margin-top:5px;
 }
 
 .remove{
   border:none;
-  background:#ffeded;
-  color:#b33;
-  padding:4px 7px;
-  border-radius:7px;
+  width:32px;
+  height:32px;
+  border-radius:10px;
+  background:rgba(255,70,100,.09);
+  color:#ff788e;
   cursor:pointer;
 }
 
-.total{
-  margin-top:15px;
-  padding-top:12px;
-  border-top:2px solid #bfe6ea;
+.checkout{
+  margin-top:18px;
+  padding:20px;
+  border-radius:22px;
+  background:
+    linear-gradient(145deg,rgba(139,92,246,.15),rgba(183,255,57,.04));
+  border:1px solid rgba(255,255,255,.1);
 }
 
-.total div{
+.total-row{
   display:flex;
   justify-content:space-between;
-  margin:7px 0;
+  padding:7px 0;
+  color:#a5a1ad;
 }
 
-.whatsapp{
+.total-row strong{
+  color:white;
+}
+
+.total-main{
+  margin:12px 0;
+  padding-top:13px;
+  border-top:1px solid rgba(255,255,255,.1);
+}
+
+.total-main strong:last-child{
+  color:var(--lime);
+  font-size:23px;
+}
+
+.checkout-label{
+  color:#8c8897;
+  font-size:11px;
+  margin:15px 0 8px;
+}
+
+.whatsapp-options{
+  display:grid;
+  gap:8px;
+}
+
+.wa{
   width:100%;
-  margin-top:14px;
-  padding:13px;
   border:none;
+  padding:13px;
   border-radius:13px;
-  background:#18a96b;
+  background:#16a866;
   color:white;
   font-weight:bold;
   cursor:pointer;
+  text-align:left;
 }
 
-/* RESPONSIVE */
-@media(max-width:600px){
-  header{
-    padding:15px 5%;
+.wa small{
+  display:block;
+  opacity:.75;
+  margin-top:3px;
+}
+
+/* =========================================================
+   NAVEGACIÓN
+   ========================================================= */
+
+.bottom-nav{
+  position:fixed;
+  z-index:150;
+  left:50%;
+  bottom:13px;
+  transform:translateX(-50%);
+  width:calc(100% - 25px);
+  max-width:500px;
+  height:68px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  padding:6px;
+  border-radius:23px;
+  background:rgba(15,11,25,.82);
+  border:1px solid rgba(255,255,255,.12);
+  backdrop-filter:blur(20px);
+  box-shadow:0 15px 50px rgba(0,0,0,.4);
+}
+
+.nav-item{
+  border:none;
+  background:transparent;
+  color:#777281;
+  border-radius:18px;
+  cursor:pointer;
+  font-size:10px;
+  font-weight:bold;
+  transition:.25s;
+}
+
+.nav-item span{
+  display:block;
+  font-size:21px;
+  margin-bottom:3px;
+}
+
+.nav-item.active{
+  background:rgba(139,92,246,.18);
+  color:white;
+}
+
+.nav-item.active span{
+  filter:drop-shadow(0 0 7px rgba(183,255,57,.5));
+}
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:95px;
+  transform:translate(-50%,20px);
+  z-index:500;
+  background:rgba(20,16,30,.92);
+  border:1px solid rgba(255,255,255,.12);
+  backdrop-filter:blur(15px);
+  padding:11px 15px;
+  border-radius:13px;
+  color:white;
+  font-size:12px;
+  opacity:0;
+  pointer-events:none;
+  transition:.3s;
+  white-space:nowrap;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translate(-50%,0);
+}
+
+/* =========================================================
+   MODAL GUÍA
+   ========================================================= */
+
+.info-modal{
+  position:fixed;
+  inset:0;
+  z-index:400;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  background:rgba(0,0,0,.65);
+  backdrop-filter:blur(8px);
+}
+
+.info-modal.active{
+  display:flex;
+}
+
+.info-box{
+  width:100%;
+  max-width:550px;
+  max-height:85vh;
+  overflow:auto;
+  padding:23px;
+  border-radius:24px;
+  background:#110d1b;
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:0 30px 80px rgba(0,0,0,.5);
+  animation:modalIn .25s ease;
+}
+
+@keyframes modalIn{
+  from{
+    opacity:0;
+    transform:scale(.92);
+  }
+  to{
+    opacity:1;
+    transform:scale(1);
+  }
+}
+
+.info-box h2{
+  margin-bottom:12px;
+}
+
+.info-box p{
+  color:#aaa6b5;
+  font-size:14px;
+  line-height:1.7;
+}
+
+.close-info{
+  float:right;
+  border:none;
+  background:rgba(255,255,255,.08);
+  color:white;
+  width:35px;
+  height:35px;
+  border-radius:10px;
+  cursor:pointer;
+}
+
+/* =========================================================
+   DESKTOP
+   ========================================================= */
+
+@media(min-width:700px){
+
+  .screen{
+    padding-left:25px;
+    padding-right:25px;
   }
 
-  .logo{
-    font-size:24px;
+  .service-list{
+    grid-template-columns:repeat(3,1fr);
   }
 
-  .menu button{
-    padding:8px 10px;
-    font-size:12px;
-  }
-
-  .rate-bar{
-    align-items:flex-start;
-    flex-direction:column;
+  .plans{
+    grid-template-columns:repeat(2,1fr);
   }
 
   .hero{
-    padding-top:25px;
+    min-height:650px;
+  }
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media(max-width:480px){
+
+  .service-list{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .service-card{
+    min-height:175px;
+    padding:15px;
+  }
+
+  .service-icon{
+    width:51px;
+    height:51px;
+    font-size:25px;
+  }
+
+  .service-card h3{
+    font-size:16px;
   }
 
   .hero h1{
-    font-size:39px;
+    font-size:56px;
   }
 
-  .modal-box{
-    padding:22px 16px;
+  .stats{
+    margin-top:30px;
+  }
+
+  .rate{
+    top:8px;
+  }
+
+  .rate-left{
+    font-size:10px;
+  }
+
+  .rate input{
+    width:62px;
   }
 }
 </style>
@@ -543,194 +1064,550 @@ header{
 
 <body>
 
-<header>
-  <div class="logo">RecargaPlus</div>
+<!-- =========================================================
+     FONDO
+     ========================================================= -->
 
-  <div class="menu">
-    <button onclick="document.getElementById('servicios').scrollIntoView({behavior:'smooth'})">
-      Servicios
-    </button>
-    <button onclick="toggleCart()">
-      🛒 Carrito
-    </button>
-  </div>
-</header>
+<div class="background">
+  <div class="orb one"></div>
+  <div class="orb two"></div>
+  <div class="orb three"></div>
+  <div class="orb four"></div>
+  <div class="particles"></div>
+  <div class="grid3d"></div>
+</div>
 
-<!-- TASA DEL DÓLAR -->
-<div class="rate-bar" id="rateBar">
-  <div class="rate-info">
-    🇻🇪 Tasa del día:
-    <span>1 USD = <b id="rateText">950</b> Bs.</span>
+<!-- =========================================================
+     TASA
+     ========================================================= -->
+
+<div class="rate" id="rateBar">
+
+  <div class="rate-left">
+    🇻🇪 Dólar del día:
+    <strong>1 USD = <span id="rateText">950</span> Bs.</strong>
   </div>
 
   <div class="rate-actions">
-    <input id="rateInput" type="number" value="950" min="1">
-    <button class="small-btn" onclick="updateRate()">Actualizar</button>
-    <button class="small-btn hide-rate" onclick="hideRate()">× Ocultar</button>
+
+    <input
+      type="number"
+      id="rateInput"
+      value="950"
+      min="1"
+    >
+
+    <button onclick="updateRate()">✓</button>
+
+    <button
+      class="rate-hide"
+      onclick="hideRate()"
+    >
+      ×
+    </button>
+
   </div>
+
 </div>
 
-<section class="hero">
-  <h1>RecargaPlus</h1>
-  <p>
-    Servicios digitales premium, entretenimiento y herramientas para potenciar
-    tu experiencia. Elige un servicio, revisa sus beneficios y agrégalo al carrito.
-  </p>
-</section>
-
-<div class="container" id="servicios">
-
-  <div class="section-title">
-    <h2>✨ Nuestros servicios</h2>
-    <p>Presiona cualquier servicio para conocer sus planes y beneficios.</p>
-  </div>
-
-  <div class="services">
-
-    <!-- CHATGPT -->
-    <div class="service" onclick="openModal('chatgpt')">
-      <div class="icon">🤖</div>
-      <h3>ChatGPT</h3>
-      <p>Elige entre ChatGPT Go y ChatGPT Pro.</p>
-      <div class="view">Ver planes →</div>
-    </div>
-
-    <!-- CLAUDE -->
-    <div class="service" onclick="openModal('claude')">
-      <div class="icon">🧠</div>
-      <h3>Claude</h3>
-      <p>Planes con más mensajes, modelos y proyectos.</p>
-      <div class="view">Ver más →</div>
-    </div>
-
-    <!-- CAPCUT -->
-    <div class="service" onclick="openModal('capcut')">
-      <div class="icon">🎬</div>
-      <h3>CapCut</h3>
-      <p>Herramientas premium para edición de video.</p>
-      <div class="view">Ver más →</div>
-    </div>
-
-    <!-- DUOLINGO -->
-    <div class="service" onclick="openModal('duolingo')">
-      <div class="icon">🦉</div>
-      <h3>Duolingo</h3>
-      <p>Aprende idiomas con funciones premium.</p>
-      <div class="view">Ver más →</div>
-    </div>
-
-    <!-- SEEKEE -->
-    <div class="service" onclick="openModal('seekee')">
-      <div class="icon">🔎</div>
-      <h3>Seekee</h3>
-      <p>Funciones de IA y herramientas exclusivas.</p>
-      <div class="view">Ver más →</div>
-    </div>
-
-    <!-- APPLE MUSIC -->
-    <div class="service" onclick="openModal('apple')">
-      <div class="icon">🎵</div>
-      <h3>Apple Music</h3>
-      <p>Música, playlists y audio de alta calidad.</p>
-      <div class="view">Ver más →</div>
-    </div>
-
-  </div>
-</div>
-
-<!-- MODAL -->
-<div class="modal" id="modal">
-  <div class="modal-box">
-
-    <button class="close" onclick="closeModal()">×</button>
-
-    <div class="modal-title">
-      <div class="icon" id="modalIcon">🤖</div>
-      <div>
-        <h2 id="modalName">Servicio</h2>
-      </div>
-    </div>
-
-    <div class="plans" id="plans"></div>
-
-    <div class="more">
-      <h3>💡 ¿Quieres saber más?</h3>
-      <p id="moreText">
-        Aquí puedes consultar información adicional sobre este servicio.
-      </p>
-      <button onclick="showMore()">Ver más información</button>
-    </div>
-
-  </div>
-</div>
-
-<!-- CARRITO -->
-<button class="cart-button" onclick="toggleCart()">
-  🛒
-  <span class="cart-count" id="cartCount">0</span>
+<button
+  class="rate-show"
+  id="rateShow"
+  onclick="showRate()"
+>
+  💵 Tasa
 </button>
 
-<div class="cart-panel" id="cartPanel">
-  <h2>🛒 Tu carrito</h2>
+<!-- =========================================================
+     APP
+     ========================================================= -->
 
-  <div id="cartItems">
-    <p style="color:#668;">Tu carrito está vacío.</p>
+<div class="app">
+
+<!-- =========================================================
+     INICIO
+     ========================================================= -->
+
+<section
+  class="screen active"
+  id="homeScreen"
+>
+
+  <div class="top">
+
+    <div class="brand">
+      Recarga<span>Plus</span>
+    </div>
+
+    <div class="status">
+      <i></i>
+      Servicios activos
+    </div>
+
   </div>
 
-  <div class="total">
-    <div>
-      <b>Total USD</b>
-      <b>$<span id="totalUSD">0.00</span></b>
+  <div class="hero">
+
+    <div class="badge">
+      <span></span>
+      SERVICIOS DIGITALES PREMIUM
+    </div>
+
+    <h1>
+      Todo lo que<br>
+      necesitas en<br>
+      <span>un solo lugar.</span>
+    </h1>
+
+    <p>
+      Descubre herramientas de inteligencia artificial,
+      entretenimiento, aprendizaje y creación de contenido.
+      Elige tu servicio, revisa sus beneficios y agrega
+      lo que quieras a tu carrito.
+    </p>
+
+    <div class="hero-buttons">
+
+      <button
+        class="primary"
+        onclick="showScreen('services')"
+      >
+        Explorar servicios →
+      </button>
+
+      <button
+        class="secondary"
+        onclick="showScreen('cart')"
+      >
+        🛒 Ver carrito
+      </button>
+
+    </div>
+
+    <div class="stats">
+
+      <div class="stat">
+        <strong>6+</strong>
+        <span>Servicios</span>
+      </div>
+
+      <div class="stat">
+        <strong>24/7</strong>
+        <span>Atención</span>
+      </div>
+
+      <div class="stat">
+        <strong>USD + Bs.</strong>
+        <span>Precios claros</span>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- =========================================================
+     SERVICIOS
+     ========================================================= -->
+
+<section
+  class="screen"
+  id="servicesScreen"
+>
+
+  <div class="top">
+
+    <div class="brand">
+      Recarga<span>Plus</span>
+    </div>
+
+  </div>
+
+  <div class="page-title">
+
+    <small>Catálogo</small>
+
+    <h2>Servicios premium</h2>
+
+    <p>
+      Toca un servicio para conocer sus planes,
+      beneficios y opciones disponibles.
+    </p>
+
+  </div>
+
+  <div class="service-list">
+
+    <div
+      class="service-card"
+      style="--glow:#8b5cf6"
+      onclick="openService('chatgpt')"
+    >
+
+      <div class="service-icon">🤖</div>
+
+      <h3>ChatGPT</h3>
+
+      <p>
+        Go y Pro. IA para crear,
+        estudiar, investigar y trabajar.
+      </p>
+
+      <div class="arrow">→</div>
+
+    </div>
+
+    <div
+      class="service-card"
+      style="--glow:#ff7b54"
+      onclick="openService('claude')"
+    >
+
+      <div class="service-icon">🧠</div>
+
+      <h3>Claude</h3>
+
+      <p>
+        IA para escritura,
+        análisis y productividad.
+      </p>
+
+      <div class="arrow">→</div>
+
+    </div>
+
+    <div
+      class="service-card"
+      style="--glow:#ff4fd8"
+      onclick="openService('capcut')"
+    >
+
+      <div class="service-icon">🎬</div>
+
+      <h3>CapCut</h3>
+
+      <p>
+        Edición, efectos,
+        plantillas y herramientas de IA.
+      </p>
+
+      <div class="arrow">→</div>
+
+    </div>
+
+    <div
+      class="service-card"
+      style="--glow:#78d64b"
+      onclick="openService('duolingo')"
+    >
+
+      <div class="service-icon">🦉</div>
+
+      <h3>Duolingo</h3>
+
+      <p>
+        Aprende idiomas con
+        funciones premium.
+      </p>
+
+      <div class="arrow">→</div>
+
+    </div>
+
+    <div
+      class="service-card"
+      style="--glow:#45e7ff"
+      onclick="openService('seekee')"
+    >
+
+      <div class="service-icon">🔎</div>
+
+      <h3>Seekee</h3>
+
+      <p>
+        Búsqueda e inteligencia
+        artificial en un solo lugar.
+      </p>
+
+      <div class="arrow">→</div>
+
+    </div>
+
+    <div
+      class="service-card"
+      style="--glow:#ff4f8b"
+      onclick="openService('apple')"
+    >
+
+      <div class="service-icon">🎵</div>
+
+      <h3>Apple Music</h3>
+
+      <p>
+        Música, playlists,
+        descargas y audio de calidad.
+      </p>
+
+      <div class="arrow">→</div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- =========================================================
+     DETALLE
+     ========================================================= -->
+
+<section
+  class="screen"
+  id="detailScreen"
+>
+
+  <div class="detail-head">
+
+    <button
+      class="back"
+      onclick="showScreen('services')"
+    >
+      ←
+    </button>
+
+    <div
+      class="detail-icon"
+      id="detailIcon"
+    >
+      🤖
     </div>
 
     <div>
-      <b>Total Bs.</b>
-      <b>Bs. <span id="totalVES">0.00</span></b>
+
+      <h2 id="detailName">
+        Servicio
+      </h2>
+
+      <p id="detailSubtitle">
+        Planes disponibles
+      </p>
+
     </div>
+
   </div>
 
-  <button class="whatsapp" onclick="sendWhatsApp()">
-    📲 Consultar / Comprar por WhatsApp
+  <div
+    class="plans"
+    id="plans"
+  ></div>
+
+  <div class="guide">
+
+    <h3>
+      💡 Guía rápida
+    </h3>
+
+    <p id="guideText">
+      Información del servicio.
+    </p>
+
+    <button
+      class="secondary"
+      style="margin-top:12px;width:100%"
+      onclick="openGuide()"
+    >
+      📖 Ver más sobre este servicio
+    </button>
+
+  </div>
+
+</section>
+
+<!-- =========================================================
+     CARRITO
+     ========================================================= -->
+
+<section
+  class="screen"
+  id="cartScreen"
+>
+
+  <div class="top">
+
+    <div class="brand">
+      Mi <span>Carrito</span>
+    </div>
+
+  </div>
+
+  <div class="page-title">
+
+    <small>Pedido</small>
+
+    <h2>Tu carrito</h2>
+
+    <p>
+      Revisa tus servicios antes de realizar
+      la consulta por WhatsApp.
+    </p>
+
+  </div>
+
+  <div id="cartContent"></div>
+
+</section>
+
+</div>
+
+<!-- =========================================================
+     NAVEGACIÓN
+     ========================================================= -->
+
+<nav class="bottom-nav">
+
+  <button
+    class="nav-item active"
+    id="navHome"
+    onclick="showScreen('home')"
+  >
+    <span>⌂</span>
+    Inicio
   </button>
+
+  <button
+    class="nav-item"
+    id="navServices"
+    onclick="showScreen('services')"
+  >
+    <span>✦</span>
+    Servicios
+  </button>
+
+  <button
+    class="nav-item"
+    id="navCart"
+    onclick="showScreen('cart')"
+  >
+    <span>🛒</span>
+    Carrito
+  </button>
+
+</nav>
+
+<!-- =========================================================
+     TOAST
+     ========================================================= -->
+
+<div
+  class="toast"
+  id="toast"
+>
+  Añadido al carrito
+</div>
+
+<!-- =========================================================
+     GUÍA MODAL
+     ========================================================= -->
+
+<div
+  class="info-modal"
+  id="infoModal"
+  onclick="closeGuideOutside(event)"
+>
+
+  <div class="info-box">
+
+    <button
+      class="close-info"
+      onclick="closeGuide()"
+    >
+      ×
+    </button>
+
+    <h2 id="infoTitle">
+      Información
+    </h2>
+
+    <p id="infoText">
+      Información del servicio.
+    </p>
+
+  </div>
+
 </div>
 
 <script>
 
-/* ============================
-   TASA DEL DÓLAR
-============================ */
+/* =========================================================
+   TASA
+   ========================================================= */
 
 let dollarRate = 950;
 
 function updateRate(){
 
-  const input = Number(document.getElementById("rateInput").value);
+  const value =
+    Number(
+      document.getElementById("rateInput").value
+    );
 
-  if(input > 0){
-    dollarRate = input;
+  if(value <= 0){
 
-    document.getElementById("rateText").textContent =
-      dollarRate.toLocaleString("es-VE");
+    showToast("Introduce una tasa válida.");
 
-    renderCart();
+    return;
   }
+
+  dollarRate = value;
+
+  document.getElementById("rateText")
+    .textContent =
+    dollarRate.toLocaleString("es-VE");
+
+  renderCart();
+
+  showToast(
+    "Tasa actualizada: 1 USD = " +
+    dollarRate.toLocaleString("es-VE") +
+    " Bs."
+  );
 }
 
 function hideRate(){
-  document.getElementById("rateBar").style.display = "none";
+
+  document
+    .getElementById("rateBar")
+    .classList.add("hidden");
+
+  document
+    .getElementById("rateShow")
+    .classList.add("active");
+}
+
+function showRate(){
+
+  document
+    .getElementById("rateBar")
+    .classList.remove("hidden");
+
+  document
+    .getElementById("rateShow")
+    .classList.remove("active");
 }
 
 
-/* ============================
+/* =========================================================
    SERVICIOS
-============================ */
+   ========================================================= */
 
 const services = {
 
   chatgpt:{
     name:"ChatGPT",
     icon:"🤖",
-
+    subtitle:"Inteligencia artificial",
+    guide:
+      "ChatGPT puede ayudarte a escribir, estudiar, investigar, programar, analizar información, trabajar con archivos e imágenes y desarrollar ideas. ChatGPT Go ofrece más acceso que el nivel gratuito, mientras que ChatGPT Pro incluye capacidades y acceso más amplio según las funciones disponibles del servicio.",
     plans:[
 
       {
@@ -748,6 +1625,7 @@ const services = {
       {
         name:"ChatGPT Pro",
         price:30,
+        featured:true,
         features:[
           "Modelo principal",
           "Modelos avanzados",
@@ -759,16 +1637,15 @@ const services = {
         ]
       }
 
-    ],
-
-    more:"ChatGPT puede ayudarte a escribir, estudiar, investigar, programar, crear ideas, analizar información y trabajar con imágenes y archivos. Las funciones disponibles dependen del plan y de la disponibilidad del servicio."
+    ]
   },
-
 
   claude:{
     name:"Claude Pro",
     icon:"🧠",
-
+    subtitle:"IA para productividad",
+    guide:
+      "Claude puede utilizarse para conversar, redactar textos, analizar información, trabajar con documentos y apoyar tareas de productividad. El plan mostrado incluye mayor acceso a mensajes y modelos, además de Projects.",
     plans:[
 
       {
@@ -782,16 +1659,15 @@ const services = {
         ]
       }
 
-    ],
-
-    more:"Claude es un asistente de IA pensado para conversar, escribir, analizar documentos, organizar información y ayudarte en diferentes tareas de productividad."
+    ]
   },
 
-
   capcut:{
-    name:"CapCut",
+    name:"CapCut Premium",
     icon:"🎬",
-
+    subtitle:"Edición de video",
+    guide:
+      "CapCut Premium está orientado a quienes quieren crear contenido con herramientas de edición más completas. Puedes trabajar con efectos, filtros, plantillas, herramientas de IA y exportaciones de alta calidad.",
     plans:[
 
       {
@@ -807,16 +1683,15 @@ const services = {
         ]
       }
 
-    ],
-
-    more:"CapCut Premium está pensado para crear y editar videos con más herramientas, efectos, plantillas y funciones de inteligencia artificial."
+    ]
   },
 
-
   duolingo:{
-    name:"Duolingo",
+    name:"Duolingo Premium",
     icon:"🦉",
-
+    subtitle:"Aprendizaje de idiomas",
+    guide:
+      "Duolingo permite aprender y practicar idiomas mediante lecciones y ejercicios. El plan premium mostrado añade una experiencia con menos interrupciones y funciones adicionales para practicar con mayor comodidad.",
     plans:[
 
       {
@@ -830,16 +1705,15 @@ const services = {
         ]
       }
 
-    ],
-
-    more:"Duolingo permite practicar idiomas mediante lecciones cortas y ejercicios. El plan premium añade funciones que hacen la experiencia más cómoda."
+    ]
   },
 
-
   seekee:{
-    name:"Seekee",
+    name:"Seekee Premium",
     icon:"🔎",
-
+    subtitle:"Búsqueda e inteligencia artificial",
+    guide:
+      "Seekee reúne herramientas de búsqueda y funciones de inteligencia artificial. El plan mostrado ofrece acceso a funciones avanzadas, respuestas más completas y menos limitaciones de uso.",
     plans:[
 
       {
@@ -854,16 +1728,15 @@ const services = {
         ]
       }
 
-    ],
-
-    more:"Seekee reúne herramientas de búsqueda y funciones de inteligencia artificial para ayudarte a encontrar información y realizar diferentes tareas."
+    ]
   },
-
 
   apple:{
     name:"Apple Music",
     icon:"🎵",
-
+    subtitle:"Música y entretenimiento",
+    guide:
+      "Apple Music ofrece música y playlists, además de funciones para escuchar contenido sin conexión y disfrutar de audio de alta calidad, según la disponibilidad del servicio y del plan.",
     plans:[
 
       {
@@ -878,115 +1751,249 @@ const services = {
         ]
       }
 
-    ],
-
-    more:"Apple Music ofrece acceso a un amplio catálogo musical, playlists y funciones para escuchar música en línea o sin conexión."
+    ]
   }
 
 };
 
 
-/* ============================
-   MODAL
-============================ */
+/* =========================================================
+   NAVEGACIÓN
+   ========================================================= */
+
+function showScreen(screen){
+
+  const screens = [
+    "homeScreen",
+    "servicesScreen",
+    "detailScreen",
+    "cartScreen"
+  ];
+
+  screens.forEach(id=>{
+    document
+      .getElementById(id)
+      .classList.remove("active");
+  });
+
+  const target =
+    screen === "home"
+      ? "homeScreen"
+      : screen === "services"
+      ? "servicesScreen"
+      : screen === "detail"
+      ? "detailScreen"
+      : "cartScreen";
+
+  document
+    .getElementById(target)
+    .classList.add("active");
+
+  document
+    .getElementById("navHome")
+    .classList.remove("active");
+
+  document
+    .getElementById("navServices")
+    .classList.remove("active");
+
+  document
+    .getElementById("navCart")
+    .classList.remove("active");
+
+  if(screen === "home"){
+    document
+      .getElementById("navHome")
+      .classList.add("active");
+  }
+
+  if(screen === "services"){
+    document
+      .getElementById("navServices")
+      .classList.add("active");
+  }
+
+  if(screen === "cart"){
+    document
+      .getElementById("navCart")
+      .classList.add("active");
+
+    renderCart();
+  }
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+}
+
+
+/* =========================================================
+   ABRIR SERVICIO
+   ========================================================= */
 
 let currentService = null;
 
-function openModal(service){
+function openService(key){
 
-  currentService = service;
+  const data = services[key];
 
-  const data = services[service];
+  currentService = key;
 
-  document.getElementById("modalName").textContent = data.name;
-  document.getElementById("modalIcon").textContent = data.icon;
-  document.getElementById("moreText").textContent = data.more;
+  document
+    .getElementById("detailIcon")
+    .textContent = data.icon;
 
-  const plans = document.getElementById("plans");
+  document
+    .getElementById("detailName")
+    .textContent = data.name;
+
+  document
+    .getElementById("detailSubtitle")
+    .textContent = data.subtitle;
+
+  document
+    .getElementById("guideText")
+    .textContent = data.guide;
+
+  const plans =
+    document.getElementById("plans");
 
   plans.innerHTML = "";
 
   data.plans.forEach((plan,index)=>{
 
-    const card = document.createElement("div");
+    const div =
+      document.createElement("div");
 
-    card.className = "plan";
+    div.className =
+      "plan" +
+      (plan.featured ? " featured" : "");
 
-    card.innerHTML = `
+    div.innerHTML = `
+
+      ${
+        plan.featured
+        ? `<div class="recommended">POPULAR</div>`
+        : ""
+      }
+
       <h3>${plan.name}</h3>
 
-      <div class="price">$${plan.price}</div>
+      <div class="plan-price">
+        $${plan.price}
+        <small>USD</small>
+      </div>
 
-      <ul>
-        ${plan.features.map(feature =>
-          `<li>${feature}</li>`
-        ).join("")}
+      <ul class="features">
+
+        ${plan.features.map(feature=>`
+
+          <li>${feature}</li>
+
+        `).join("")}
+
       </ul>
 
-      <button class="add"
-        onclick="addToCart('${service}',${index})">
+      <button
+        class="add-btn"
+        onclick="addToCart('${key}',${index})"
+      >
         🛒 Agregar al carrito
       </button>
+
     `;
 
-    plans.appendChild(card);
+    plans.appendChild(div);
 
   });
 
-  document.getElementById("modal").classList.add("active");
+  showScreen("detail");
+
 }
 
-function closeModal(){
-  document.getElementById("modal").classList.remove("active");
-}
 
-document.getElementById("modal").addEventListener("click",function(e){
+/* =========================================================
+   GUÍA
+   ========================================================= */
 
-  if(e.target === this){
-    closeModal();
+function openGuide(){
+
+  if(!currentService){
+    return;
   }
 
-});
+  const data =
+    services[currentService];
 
+  document
+    .getElementById("infoTitle")
+    .textContent =
+    "Guía de " + data.name;
 
-/* ============================
-   INFORMACIÓN EXTRA
-============================ */
+  document
+    .getElementById("infoText")
+    .textContent =
+    data.guide +
+    "\n\nPuedes seleccionar cualquiera de los planes mostrados y añadirlo a tu carrito para consultar disponibilidad y realizar tu pedido.";
 
-function showMore(){
+  document
+    .getElementById("infoModal")
+    .classList.add("active");
+}
 
-  const data = services[currentService];
+function closeGuide(){
 
-  alert(
-    "Información sobre " + data.name + ":\n\n" +
-    data.more +
-    "\n\nSelecciona el plan que quieras agregar al carrito."
-  );
+  document
+    .getElementById("infoModal")
+    .classList.remove("active");
+}
+
+function closeGuideOutside(e){
+
+  if(
+    e.target ===
+    document.getElementById("infoModal")
+  ){
+    closeGuide();
+  }
+
 }
 
 
-/* ============================
+/* =========================================================
    CARRITO
-============================ */
+   ========================================================= */
 
 let cart = [];
 
-function addToCart(service,index){
+function addToCart(key,index){
 
-  const data = services[service];
-  const plan = data.plans[index];
+  const service =
+    services[key];
+
+  const plan =
+    service.plans[index];
 
   cart.push({
-    service:data.name,
+
+    service:service.name,
     plan:plan.name,
     price:plan.price
+
   });
 
   renderCart();
 
-  closeModal();
+  showToast(
+    plan.name +
+    " agregado al carrito ✓"
+  );
 
-  document.getElementById("cartPanel").classList.add("active");
+  setTimeout(()=>{
+    showScreen("cart");
+  },250);
+
 }
 
 function removeFromCart(index){
@@ -994,88 +2001,196 @@ function removeFromCart(index){
   cart.splice(index,1);
 
   renderCart();
+
+  showToast(
+    "Producto eliminado"
+  );
 }
 
 function renderCart(){
 
-  const items = document.getElementById("cartItems");
+  const container =
+    document.getElementById("cartContent");
 
-  document.getElementById("cartCount").textContent = cart.length;
-
-  if(cart.length === 0){
-
-    items.innerHTML =
-      `<p style="color:#668;">Tu carrito está vacío.</p>`;
-
-    document.getElementById("totalUSD").textContent = "0.00";
-    document.getElementById("totalVES").textContent = "0.00";
-
+  if(!container){
     return;
   }
 
-  let total = 0;
+  if(cart.length === 0){
 
-  items.innerHTML = "";
+    container.innerHTML = `
 
-  cart.forEach((item,index)=>{
+      <div class="cart-empty">
 
-    total += item.price;
+        <div class="big">🛒</div>
 
-    const div = document.createElement("div");
+        <h3>
+          Tu carrito está vacío
+        </h3>
 
-    div.className = "cart-item";
+        <p>
+          Agrega un servicio para comenzar tu pedido.
+        </p>
 
-    div.innerHTML = `
-      <div>
-        <b>${item.service}</b><br>
-        <span>${item.plan}</span><br>
-        <b>$${item.price.toFixed(2)}</b>
+        <button
+          class="primary"
+          style="margin-top:18px"
+          onclick="showScreen('services')"
+        >
+          Explorar servicios
+        </button>
+
       </div>
 
-      <button class="remove"
-        onclick="removeFromCart(${index})">
-        ×
-      </button>
     `;
-
-    items.appendChild(div);
-
-  });
-
-  document.getElementById("totalUSD").textContent =
-    total.toFixed(2);
-
-  document.getElementById("totalVES").textContent =
-    (total * dollarRate).toLocaleString("es-VE",{
-      minimumFractionDigits:2,
-      maximumFractionDigits:2
-    });
-}
-
-function toggleCart(){
-
-  document.getElementById("cartPanel")
-    .classList.toggle("active");
-
-}
-
-
-/* ============================
-   WHATSAPP
-============================ */
-
-function sendWhatsApp(){
-
-  if(cart.length === 0){
-
-    alert("Agrega al menos un servicio al carrito.");
 
     return;
   }
 
-  let message = "Hola, quiero consultar estos servicios de RecargaPlus:%0A%0A";
+  let total = 0;
+
+  cart.forEach(item=>{
+    total += item.price;
+  });
+
+  const totalBs =
+    total * dollarRate;
+
+  container.innerHTML = `
+
+    <div class="cart-items">
+
+      ${cart.map((item,index)=>`
+
+        <div class="cart-item">
+
+          <div class="cart-info">
+
+            <strong>
+              ${item.service}
+            </strong>
+
+            <span>
+              ${item.plan}
+            </span>
+
+            <div class="cart-price">
+              $${item.price.toFixed(2)}
+            </div>
+
+          </div>
+
+          <button
+            class="remove"
+            onclick="removeFromCart(${index})"
+          >
+            ×
+          </button>
+
+        </div>
+
+      `).join("")}
+
+    </div>
+
+    <div class="checkout">
+
+      <div class="total-row">
+        <span>Servicios</span>
+        <strong>${cart.length}</strong>
+      </div>
+
+      <div class="total-row">
+        <span>Total en dólares</span>
+        <strong>
+          $${total.toFixed(2)}
+        </strong>
+      </div>
+
+      <div class="total-row">
+        <span>Tasa utilizada</span>
+        <strong>
+          ${dollarRate.toLocaleString("es-VE")} Bs.
+        </strong>
+      </div>
+
+      <div class="total-row total-main">
+        <strong>Total en Bs.</strong>
+
+        <strong>
+          Bs. ${totalBs.toLocaleString(
+            "es-VE",
+            {
+              minimumFractionDigits:2,
+              maximumFractionDigits:2
+            }
+          )}
+        </strong>
+      </div>
+
+      <div class="checkout-label">
+        SELECCIONA DÓNDE QUIERES REALIZAR LA CONSULTA
+      </div>
+
+      <div class="whatsapp-options">
+
+        <button
+          class="wa"
+          onclick="sendWhatsApp('principal')"
+        >
+          📲 WhatsApp principal
+          <small>
+            0424-2052486
+          </small>
+        </button>
+
+        <button
+          class="wa"
+          onclick="sendWhatsApp('secundario')"
+        >
+          📲 WhatsApp secundario
+          <small>
+            0412-7466566
+          </small>
+        </button>
+
+      </div>
+
+    </div>
+
+  `;
+}
+
+
+/* =========================================================
+   WHATSAPP
+   ========================================================= */
+
+function sendWhatsApp(type){
+
+  if(cart.length === 0){
+
+    showToast(
+      "Primero agrega un servicio."
+    );
+
+    return;
+  }
+
+  const phones = {
+
+    principal:
+      "584242052486",
+
+    secundario:
+      "584127466566"
+
+  };
 
   let total = 0;
+
+  let message =
+    "Hola, quiero consultar un pedido de RecargaPlus:%0A%0A";
 
   cart.forEach(item=>{
 
@@ -1092,29 +2207,68 @@ function sendWhatsApp(){
 
   });
 
-  const totalBs = total * dollarRate;
+  const totalBs =
+    total * dollarRate;
 
   message +=
     "%0A💵 Total USD: $" +
     total.toFixed(2) +
-    "%0A🇻🇪 Total Bs.: " +
-    totalBs.toLocaleString("es-VE") +
-    " Bs.%0A%0A" +
-    "Tasa utilizada: 1 USD = " +
-    dollarRate +
-    " Bs.";
 
-  /* CAMBIA ESTE NÚMERO POR TU WHATSAPP */
-  const phone = "58424202486";
+    "%0A🇻🇪 Total Bs.: " +
+    totalBs.toLocaleString("es-VE",{
+      minimumFractionDigits:2,
+      maximumFractionDigits:2
+    }) +
+
+    " Bs.%0A%0A" +
+
+    "📊 Tasa utilizada: 1 USD = " +
+    dollarRate.toLocaleString("es-VE") +
+    " Bs.%0A%0A" +
+
+    "Quedo atento para confirmar disponibilidad y realizar el pedido.";
 
   window.open(
-    "https://wa.me/" + phone + "?text=" + message,
+    "https://wa.me/" +
+    phones[type] +
+    "?text=" +
+    message,
     "_blank"
   );
+
 }
 
 
-/* INICIALIZAR */
+/* =========================================================
+   TOAST
+   ========================================================= */
+
+let toastTimer;
+
+function showToast(message){
+
+  const toast =
+    document.getElementById("toast");
+
+  toast.textContent = message;
+
+  toast.classList.add("show");
+
+  clearTimeout(toastTimer);
+
+  toastTimer =
+    setTimeout(()=>{
+
+      toast.classList.remove("show");
+
+    },2300);
+}
+
+
+/* =========================================================
+   INICIO
+   ========================================================= */
+
 renderCart();
 
 </script>
